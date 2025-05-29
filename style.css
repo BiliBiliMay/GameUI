@@ -1,362 +1,170 @@
+/* @font-face rule ... (keep from previous) */
 @font-face {
-    font-family: 'MorrowindCustomFont'; /* Choose a name for your font family */
+    font-family: 'MorrowindCustomFont';
     src: url('MyMorrowindFont.ttf') format('truetype');
-
-    font-weight: normal; /* Or bold, if it's a bold variant */
-    font-style: normal;  /* Or italic, if it's an italic variant */
+    font-weight: normal;
+    font-style: normal;
 }
 
-
-body {
-    background-color: #121212;
-    /* --- THIS IS THE KEY CHANGE FOR GLOBAL FONT APPLICATION --- */
-    font-family: 'MorrowindCustomFont', Verdana, sans-serif; 
-    /* 
-       'MorrowindCustomFont' is now the primary font.
-       Verdana and sans-serif are fallbacks if your custom font fails to load or 
-       doesn't contain certain characters.
-    */
-    color: #cccccc;
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
-    height: 100vh;
-    overflow: hidden;
-    font-size: 13px; /* You might need to adjust this base font size 
-                        once your custom font is applied, as it might
-                        render differently in size. */
+    overflow: hidden; 
+}
+
+body {
+    background-color: #121212; 
+    font-family: 'MorrowindCustomFont', Verdana, sans-serif; 
+    color: #cccccc;
+    font-size: 13px;
+    user-select: none; /* Prevent text selection during resize */
 }
 
 #morrowind-ui-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    /* Define column widths using CSS variables for JS to manipulate */
+    --stats-col-width: 300px;
+    --spells-col-width: 220px;
+    --splitter-width: 6px; /* Width of the draggable splitter */
+    /* --map-col-width will be 1fr (flexible) */
+
+    /* Define row heights */
+    --top-row-height: minmax(350px, 60%); /* Top row takes up to 60% or min 350px */
+    /* Bottom row will be 1fr */
+
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    
+    grid-template-columns:
+        var(--stats-col-width)
+        var(--splitter-width)
+        var(--spells-col-width)
+        var(--splitter-width)
+        1fr; /* Map column */
+    grid-template-rows: var(--top-row-height) 1fr; /* Top row, Bottom row for inventory */
+    
+    /* gap: 3px; /* Remove main grid gap, splitters handle separation */
+    background-color: #0a0a0a; 
+    box-sizing: border-box;
 }
 
-.morrowind-window {
-    position: absolute;
-    background-color: #2a2a2a; /* Dark content background */
-    border: 2px solid #000; /* Base for complex border */
+.morrowind-panel {
+    background-color: #2a2a2a; 
+    border: 1px solid #000; 
     box-shadow: 
-        inset 0 0 0 2px #504030, /* Inner "gold" border part 1 */
-        inset 0 0 0 3px #302010, /* Inner "gold" border part 2 for depth */
-        3px 3px 8px rgba(0,0,0,0.7); /* Outer shadow */
+        inset 0 0 0 1px #504030,
+        inset 0 0 0 2px #302010;
     display: flex;
     flex-direction: column;
-    min-width: 200px;
+    overflow: hidden; 
+    /* Add a small margin to visually separate from splitters if gap is removed */
+    margin: 1px; 
 }
 
-.window-title-bar {
-    background-image: linear-gradient(to bottom, #554422, #443311); /* Textured gold/brown */
-    padding: 5px 10px;
-    cursor: move;
+/* Assigning panels and splitters to grid cells */
+#character-stats-window { grid-column: 1; grid-row: 1; }
+#splitter-stats-spells  { grid-column: 2; grid-row: 1; }
+#spells-window          { grid-column: 3; grid-row: 1; }
+#splitter-spells-map    { grid-column: 4; grid-row: 1; }
+#map-window             { grid-column: 5; grid-row: 1 / span 2; /* Span both rows */ }
+#inventory-window       { grid-column: 1 / span 3; grid-row: 2; /* Spans under stats and spells */ }
+
+
+.splitter {
+    background-color: #443311; /* Morrowind-style color for splitter */
+    /* border-left: 1px solid #504030; */
+    /* border-right: 1px solid #302010; */
     display: flex;
-    justify-content: center; /* Centered title */
     align-items: center;
-    border-bottom: 2px solid #302010; /* Darker separator for title bar */
-    position: relative; /* For absolute positioning of close button */
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    justify-content: center;
+    z-index: 10; /* Ensure splitters are above panels if any overlap issues */
+}
+.splitter:hover {
+    background-color: #5a4b3a;
 }
 
-.window-title {
-    font-family: 'MorrowindCustomFont', Verdana, sans-serif;
-    font-weight: bold;
-    color: #e0e0d0;
-    font-size: 1.1em;
+.vertical-splitter {
+    cursor: col-resize;
 }
-
-.window-close-button {
-    background: #4a3b2a;
-    color: #e0e0d0;
-    border: 1px solid #2d231a;
-    box-shadow: inset 0 0 0 1px #6b5743;
-    padding: 1px 6px;
-    font-size: 16px;
+/* Optional: add a visual cue inside the splitter */
+/* .vertical-splitter::before {
+    content: '::';
+    color: #2d231a;
+    font-size: 10px;
     line-height: 1;
-    cursor: pointer;
-    font-weight: bold;
-    position: absolute; /* Positioned to the right */
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.window-close-button:hover {
-    background: #5a4b3a;
-}
-.window-close-button:active {
-    background: #3a2b1a;
-    box-shadow: inset 1px 1px 2px #1d130a;
-}
+    transform: rotate(90deg);
+} */
 
-.window-content {
-    padding: 10px;
+
+.panel-title-bar { /* ... (keep styles from previous) ... */
+    background-image: linear-gradient(to bottom, #554422, #443311);
+    padding: 4px 8px; 
+    text-align: center;
+    border-bottom: 1px solid #302010;
+    color: #e0e0d0;
+    font-size: 1em; 
+    font-weight: bold;
+    flex-shrink: 0; 
+}
+.panel-content { /* ... (keep styles from previous) ... */
+    padding: 8px;
     flex-grow: 1;
-    overflow-y: auto;
-    color: #c0c0c0; /* Slightly dimmer text for content */
-}
-
-/* Specific styling for dark theme elements */
-.gauge.dark, .tab-button.dark, .tab-content.dark, .spell-list.dark {
-    border-color: #444; /* Darker borders for elements within dark content */
-}
-.tab-button.dark.active {
-    background-color: #3a3a3a; /* Active tab darker */
-    border-bottom-color: #3a3a3a;
-}
-.spell-list.dark li:hover {
-    background-color: #383838;
-}
-
-
-/* Character Stats Window - Katariah Style */
-.char-top-stats {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Align items to the top */
-    margin-bottom: 10px;
-    border-bottom: 1px solid #444;
-    padding-bottom: 10px;
-}
-
-.char-gauges {
-    flex-grow: 1;
-    margin-right: 15px;
-}
-.gauge-block {
-    margin-bottom: 5px;
-}
-.gauge-label-inline {
-    font-size: 0.9em;
-    color: #aaa;
-    margin-bottom: 2px;
-    display: block; /* Make it take full width initially */
-}
-
-.gauge { /* General gauge styling */
-    height: 18px; /* Thicker gauges */
-    background-color: #1a1a1a; /* Very dark track */
-    border: 1px solid #444;
-    position: relative;
-    overflow: hidden; /* To contain the text within rounded corners if any */
-}
-.gauge-bar-fill {
-    height: 100%;
-    transition: width 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-.gauge-value-text-overlay {
-    color: #fff;
-    font-size: 0.85em;
-    font-weight: bold;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.7);
-    white-space: nowrap;
-    padding: 0 5px;
-}
-
-
-.char-basic-info {
-    width: 120px; /* Fixed width for Level/Race/Class */
-    font-size: 0.95em;
-    padding-left: 10px;
-    border-left: 1px solid #444;
-}
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4px;
-}
-.info-row span:first-child { color: #aaa; }
-.info-row span:last-child { color: #ddd; font-weight: bold; }
-
-.char-main-content {
-    display: flex;
-}
-
-.attributes-panel {
-    width: 40%;
-    padding-right: 10px;
-    border-right: 1px solid #444;
-}
-.skills-panel {
-    width: 60%;
-    padding-left: 10px;
-}
-
-.attr-item, .skill-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 3px 0;
-    font-size: 0.95em;
-    border-bottom: 1px dotted #383838;
-}
-.attr-item:last-child, .skill-item:last-child {
-    border-bottom: none;
-}
-.attr-item span:first-child, .skill-item span:first-child {
-    color: #b0b0b0;
-}
-.attr-item span:last-child, .skill-item span:last-child {
-    font-weight: bold;
-    color: #e0e0e0;
-}
-.skill-item:hover { background-color: #383838; cursor: default; }
-
-
-.skills-category {
-    margin-bottom: 10px;
-}
-.skill-cat-title {
-    margin: 0 0 5px 0;
-    font-size: 1.05em;
+    overflow-y: auto; 
     color: #c0c0c0;
-    border-bottom: 1px solid #444;
-    padding-bottom: 3px;
 }
 
-/* Spellbook Window */
-.spellbook-section-title {
-    margin: 10px 0 5px 0;
-    font-size: 1em;
-    color: #c0c0c0;
-    border-bottom: 1px solid #444;
-    padding-bottom: 3px;
-}
+/* ... (Keep all other specific panel content styles for Manani, Spells, Inventory, Map from previous) ... */
+/* Character Stats Panel ("Manani" specific layout) */
+.char-top-gauges { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #444;}
+.gauge-block { margin-bottom: 4px; }
+.gauge-label { font-size: 0.9em; color: #aaa; margin-bottom: 2px; display: block;}
+.gauge.dark { height: 16px; background-color: #1a1a1a; border: 1px solid #444; position: relative; overflow: hidden;}
+.gauge-bar-fill { height: 100%; transition: width 0.3s ease; display: flex; align-items: center; justify-content: center; overflow: hidden;}
+.gauge-value-text-overlay { color: #fff; font-size: 0.8em; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.7); white-space: nowrap; padding: 0 4px;}
+.char-info-attributes { display: flex; justify-content: space-between; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #444;}
+.char-basic-info-grid { width: 35%; font-size: 0.9em; }
+.attributes-panel-grid { width: 60%; }
+.info-row, .attr-item { display: flex; justify-content: space-between; margin-bottom: 2px; font-size: 0.9em;}
+.info-row span:first-child, .attr-item span:first-child { color: #aaa; margin-right: 5px;}
+.info-row span:last-child, .attr-item span:last-child { color: #ddd; font-weight:normal; }
+.skills-panel-grid .skills-category { margin-bottom: 6px; }
+.skill-cat-title { margin: 0 0 3px 0; font-size: 0.95em; color: #c0c0c0; border-bottom: 1px solid #444; padding-bottom: 2px;}
+.skill-item { display: flex; justify-content: space-between; padding: 1px 0; font-size: 0.9em;}
+.skill-item:hover { background-color: #383838; }
+.skill-item span:first-child { color: #b0b0b0; }
+.skill-item span:last-child { color: #e0e0e0; }
+
+/* Spells Panel */
+.spellbook-section-title { margin: 8px 0 4px 0; font-size: 0.95em;}
 .spellbook-section-title:first-of-type { margin-top: 0; }
-
-.spell-cost-header {
-    float: right;
-    font-size: 0.9em;
-    color: #aaa;
-}
-
-.spell-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.spell-list li {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 3px;
-    border-bottom: 1px dotted #383838;
-    font-size: 0.95em;
-}
+.spell-cost-header { float: right; font-size: 0.9em; color: #aaa;}
+.spell-list { list-style: none; padding: 0; margin: 0; }
+.spell-list li { display: flex; justify-content: space-between; padding: 2px; border-bottom: 1px dotted #383838; font-size: 0.9em;}
 .spell-list li:last-child { border-bottom: none; }
-.spell-list li:hover { background-color: #383838; cursor: default; }
-.spell-list span:last-child {
-    color: #b0b0b0;
-    min-width: 45px;
-    text-align: right;
-}
+.spell-list li:hover { background-color: #383838; }
+.spell-list span:last-child { color: #b0b0b0; min-width: 40px; text-align: right; }
 
-/* Inventory Window - Dark Theme */
-#inventory-window .window-content { padding: 5px; } /* Less padding for compact inventory */
+/* Inventory Panel ("Daedric Spear" specific layout) */
+.inventory-panel-content { padding: 5px; display: flex; flex-direction: column; }
+.inventory-encumbrance-bar { margin-bottom: 5px; padding: 3px; background-color: #1e1e1e; border-bottom: 1px solid #444; flex-shrink: 0;}
+.inventory-encumbrance-bar .gauge { height: 16px !important; }
+.inventory-tabs.horizontal { display: flex; margin-bottom: 5px; border-bottom: 1px solid #444; flex-shrink: 0;}
+.inventory-tabs.horizontal .tab-button { background-color: #2f2f2f; border: 1px solid #444; border-bottom: none; padding: 4px 8px; cursor: pointer; color: #b0b0b0; margin-right: 2px; font-size: 0.9em; border-radius: 3px 3px 0 0;}
+.inventory-tabs.horizontal .tab-button.active { background-color: #3a3a3a; color: #e0e0e0; font-weight: bold; border-bottom: 1px solid #3a3a3a; }
+.inventory-main-area { display: flex; flex-grow: 1; gap: 5px; overflow: hidden; }
+.paperdoll-area-inventory { width: 110px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; background-color: #1e1e1e; border: 1px solid #444; padding: 5px;}
+.paperdoll-area-inventory img { margin-bottom: 5px; max-width:100%; height:auto;}
+.armor-rating { font-size: 0.9em; margin-top: auto; color: #ccc;}
+.item-grid-container { flex-grow: 1; overflow-y: auto; background-color: #222; padding: 5px; border: 1px solid #444;}
+.tab-content.dark { display: none; } 
+.tab-content.dark.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(36px, 1fr)); gap: 3px;}
+.item-slot { width: 36px; height: 36px; background-color: #333; border: 1px solid #444; display: flex; align-items: center; justify-content: center; position: relative; font-size: 0.8em;}
+.item-slot img { max-width: 90%; max-height: 90%;}
+.item-count { position: absolute; bottom: 1px; right: 1px; font-size: 0.8em; color: #e0e0d0; background-color: rgba(0,0,0,0.6); padding: 0 2px; border-radius: 2px;}
 
-.inventory-layout { display: flex; flex-direction: column; height: 100%; }
+/* Map Panel */
+.map-panel-content { padding: 0 !important; display: flex; justify-content: center; align-items: center; overflow: hidden; background-color: #000;}
+.map-panel-content img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-.inventory-status-bar {
-    margin-bottom: 5px;
-    padding: 5px;
-    background-color: #1e1e1e; /* Dark bar background */
-    border-bottom: 1px solid #444;
-}
-.inventory-status-bar .gauge { height: 16px !important; }
-
-.inventory-main-area {
-    display: flex;
-    flex-grow: 1;
-}
-
-.inventory-tabs.vertical {
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #444; /* Separator for vertical tabs */
-    margin-right: 5px;
-    padding-right: 5px;
-}
-
-.tab-button { /* General tab button */
-    background-color: #2f2f2f;
-    border: 1px solid #444;
-    padding: 6px 8px;
-    cursor: pointer;
-    color: #b0b0b0;
-    text-align: left;
-}
-.inventory-tabs.vertical .tab-button {
-    margin-bottom: 3px; /* Space between vertical tabs */
-    border-radius: 3px 0 0 3px;
-    border-right: none;
-}
-.inventory-tabs.vertical .tab-button.active {
-    background-color: #3a3a3a;
-    color: #e0e0e0;
-    font-weight: bold;
-    border-left: 3px solid #776644; /* Active tab indicator */
-}
-
-.paperdoll-and-items {
-    display: flex;
-    flex-grow: 1;
-}
-
-.paperdoll-area-small {
-    width: 90px;
-    margin-right: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #1e1e1e;
-    border: 1px solid #444;
-}
-.paperdoll-area-small img {
-    max-width: 100%;
-    max-height: 100%;
-}
-
-.item-list-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    background-color: #222; /* Background for item list area */
-    padding: 5px;
-    border: 1px solid #444;
-}
-
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-.inv-item {
-    padding: 4px 2px;
-    border-bottom: 1px dotted #383838;
-    font-size: 0.9em;
-    cursor: default;
-}
-.inv-item:last-child { border-bottom: none; }
-.inv-item:hover { background-color: #383838; }
-.item-count {
-    float: right;
-    color: #999;
-}
-
-/* Map Window */
-.map-content {
-    padding: 0 !important; /* Remove padding for full map */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Ensure image fits */
-    background-color: #000; /* Black background for map if image smaller */
-}
-.map-content img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Or 'cover' or 'scale-down' depending on desired behavior */
-}
-
-button, input, textarea, select {
-    font-family: 'MorrowindCustomFont', Verdana, sans-serif;
-    /* You might also want to inherit other font properties */
-    /* font-size: inherit; */
-}
+button, input, textarea, select { font-family: 'MorrowindCustomFont', Verdana, sans-serif;}

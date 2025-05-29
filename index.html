@@ -3,169 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morrowind UI Demo - Dark Theme</title>
+    <title>Morrowind UI - Reactive & Resizable Grid</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="morrowind-ui-container">
 
-        <!-- Character Stats Window (Example: Katariah) -->
-        <div class="morrowind-window" id="character-stats-window" style="top: 20px; left: 20px; width: 480px;">
-            <div class="window-title-bar">
-                <span class="window-title">Katariah</span>
-                <button class="window-close-button">×</button>
-            </div>
-            <div class="window-content">
-                <div class="char-top-stats">
-                    <div class="char-gauges">
-                        <div class="gauge-block">
-                            <div class="gauge-label-inline">Health</div>
-                            <div class="gauge dark" data-current="50" data-max="100" data-color="#c00000"></div>
-                        </div>
-                        <div class="gauge-block">
-                            <div class="gauge-label-inline">Magicka</div>
-                            <div class="gauge dark" data-current="75" data-max="100" data-color="#0048c0"></div>
-                        </div>
-                        <div class="gauge-block">
-                            <div class="gauge-label-inline">Fatigue</div>
-                            <div class="gauge dark" data-current="15" data-max="100" data-color="#009000"></div>
-                        </div>
+        <!-- Column 1: Character Stats -->
+        <div class="morrowind-panel" id="character-stats-window">
+            <div class="panel-title-bar"><span class="panel-title">Manani</span></div>
+            <div class="panel-content">
+                <!-- ... (Manani content from previous step) ... -->
+                <div class="char-top-gauges">
+                    <div class="gauge-block"><span class="gauge-label">Health</span><div class="gauge dark" data-current="110" data-max="158" data-color="#c00000"></div></div>
+                    <div class="gauge-block"><span class="gauge-label">Magicka</span><div class="gauge dark" data-current="3" data-max="52" data-color="#0048c0"></div></div>
+                    <div class="gauge-block"><span class="gauge-label">Fatigue</span><div class="gauge dark" data-current="316" data-max="335" data-color="#009000"></div></div>
+                </div>
+                <div class="char-info-attributes">
+                    <div class="char-basic-info-grid">
+                        <div class="info-row"><span>Level</span><span>19</span></div>
+                        <div class="info-row"><span>Race</span><span>Argonian</span></div>
+                        <div class="info-row"><span>Class</span><span>Warrior</span></div>
                     </div>
-                    <div class="char-basic-info">
-                        <div class="info-row"><span>Level</span><span>21</span></div>
-                        <div class="info-row"><span>Race</span><span>Dunmer</span></div>
-                        <div class="info-row"><span>Class</span><span>Sorcerer</span></div>
+                    <div class="attributes-panel-grid">
+                        <div class="attr-item"><span>Strength</span><span>140</span></div><div class="attr-item"><span>Intelligence</span><span>52</span></div>
+                        <div class="attr-item"><span>Willpower</span><span>30</span></div><div class="attr-item"><span>Agility</span><span>81</span></div>
+                        <div class="attr-item"><span>Speed</span><span>75</span></div><div class="attr-item"><span>Endurance</span><span>84</span></div>
+                        <div class="attr-item"><span>Personality</span><span>49</span></div><div class="attr-item"><span>Luck</span><span>41</span></div>
                     </div>
                 </div>
-
-                <div class="char-main-content">
-                    <div class="attributes-panel">
-                        <div class="attr-item"><span>Strength</span><span>30</span></div>
-                        <div class="attr-item"><span>Intelligence</span><span>80</span></div>
-                        <div class="attr-item"><span>Willpower</span><span>60</span></div>
-                        <div class="attr-item"><span>Agility</span><span>30</span></div>
-                        <div class="attr-item"><span>Speed</span><span>30</span></div>
-                        <div class="attr-item"><span>Endurance</span><span>30</span></div>
-                        <div class="attr-item"><span>Personality</span><span>80</span></div>
-                        <div class="attr-item"><span>Luck</span><span>70</span></div>
-                    </div>
-                    <div class="skills-panel">
-                        <div class="skills-category">
-                            <h4 class="skill-cat-title">Major Skills</h4>
-                            <div class="skill-item"><span>Destruction</span><span>50</span></div>
-                            <div class="skill-item"><span>Restoration</span><span>50</span></div>
-                            <div class="skill-item"><span>Alteration</span><span>50</span></div>
-                            <div class="skill-item"><span>Conjuration</span><span>50</span></div>
-                            <div class="skill-item"><span>Alchemy</span><span>50</span></div>
-                        </div>
-                        <div class="skills-category">
-                            <h4 class="skill-cat-title">Minor Skills</h4>
-                            <div class="skill-item"><span>Enchant</span><span>50</span></div>
-                            <div class="skill-item"><span>Illusion</span><span>50</span></div>
-                            <div class="skill-item"><span>Speechcraft</span><span>50</span></div>
-                            <div class="skill-item"><span>Security</span><span>50</span></div>
-                            <div class="skill-item"><span>Short Blade</span><span>50</span></div>
-                        </div>
-                        <div class="skills-category">
-                            <h4 class="skill-cat-title">Misc Skills</h4>
-                            <div class="skill-item"><span>Block</span><span>50</span></div>
-                            <div class="skill-item"><span>Marksman</span><span>50</span></div>
-                            <div class="skill-item"><span>Medium Armor</span><span>50</span></div>
-                            <div class="skill-item"><span>Heavy Armor</span><span>50</span></div>
-                            <div class="skill-item"><span>Long Blade</span><span>50</span></div>
-                        </div>
-                    </div>
+                <div class="skills-panel-grid">
+                    <div class="skills-category"><h4 class="skill-cat-title">Major Skills</h4><div class="skill-item"><span>Long Blade</span><span>53</span></div><div class="skill-item"><span>Medium Armor</span><span>71</span></div><div class="skill-item"><span>Heavy Armor</span><span>45</span></div><div class="skill-item"><span>Athletics</span><span>82</span></div><div class="skill-item"><span>Block</span><span>47</span></div></div>
+                    <div class="skills-category"><h4 class="skill-cat-title">Minor Skills</h4><div class="skill-item"><span>Armorer</span><span>24</span></div><div class="skill-item"><span>Spear</span><span>86</span></div><div class="skill-item"><span>Marksman</span><span>18</span></div><div class="skill-item"><span>Axe</span><span>24</span></div><div class="skill-item"><span>Blunt Weapon</span><span>32</span></div></div>
+                    <div class="skills-category"><h4 class="skill-cat-title">Misc Skills</h4><div class="skill-item"><span>Enchant</span><span>17</span></div></div>
                 </div>
             </div>
         </div>
 
-        <!-- Spellbook Window -->
-        <div class="morrowind-window" id="spellbook-window" style="top: 70px; left: 520px; width: 250px;">
-            <div class="window-title-bar">
-                <span class="window-title">Spellbook</span>
-                <button class="window-close-button">×</button>
-            </div>
-            <div class="window-content">
-                <h4 class="spellbook-section-title">Powers</h4>
-                <ul class="spell-list dark">
-                    <li><span>Ancestor Guardian</span><span></span></li>
-                </ul>
+        <!-- Splitter 1 -->
+        <div class="splitter vertical-splitter" id="splitter-stats-spells"></div>
+
+        <!-- Column 2: Spells -->
+        <div class="morrowind-panel" id="spells-window">
+            <div class="panel-title-bar"><span class="panel-title">Almsivi Intervention</span></div>
+            <div class="panel-content">
+                <!-- ... (Spells content from previous step) ... -->
+                <h4 class="spellbook-section-title">Powers</h4><ul class="spell-list dark"><li><span>Luck of the Emperor</span><span></span></li></ul>
                 <h4 class="spellbook-section-title">Spells <span class="spell-cost-header">Cost/Chance</span></h4>
                 <ul class="spell-list dark">
-                    <li><span>Fireball</span><span>10/50</span></li>
-                    <li><span>Frostbite</span><span>10/50</span></li>
-                    <li><span>Lightning Bolt</span><span>10/50</span></li>
-                    <li><span>Heal Self</span><span>15/100</span></li>
+                    <li><span>Almsivi Intervention</span><span>8/0</span></li><li><span>Blood of the North</span><span>15/100</span></li>
+                    <li><span>Burden</span><span>15/0</span></li><li><span>Cure Common Disease</span><span>15/0</span></li>
+                    <li><span>Detect Key</span><span>13/0</span></li><li><span>Feather</span><span>10/0</span></li>
+                    <li><span>Fire Bite</span><span>6/0</span></li><li><span>Frostbite</span><span>6/0</span></li>
+                    <li><span>Levitate</span><span>45/0</span></li><li><span>Light</span><span>9/0</span></li>
                 </ul>
+            </div>
+        </div>
+
+        <!-- Splitter 2 -->
+        <div class="splitter vertical-splitter" id="splitter-spells-map"></div>
+
+        <!-- Column 3: Map -->
+        <div class="morrowind-panel" id="map-window">
+            <div class="panel-title-bar"><span class="panel-title">Balmora</span></div>
+            <div class="panel-content map-panel-content">
+                <img src="your_actual_map_image.png" alt="Vvardenfell Map"> <!-- UPDATE THIS PATH -->
             </div>
         </div>
         
-        <!-- Inventory Window -->
-        <div class="morrowind-window" id="inventory-window" style="top: 120px; left: 790px; width: 320px; height: 400px;">
-            <div class="window-title-bar">
-                <span class="window-title">Inventory</span>
-                <button class="window-close-button">×</button>
-            </div>
-            <div class="window-content inventory-layout">
-                <div class="inventory-status-bar">
-                     <div class="gauge dark" data-label="" data-current="78" data-max="100" data-color="#0048c0" style="height: 18px;"></div>
+        <!-- Row 2: Inventory (spans under Stats and Spells) -->
+        <div class="morrowind-panel" id="inventory-window">
+            <div class="panel-title-bar"><span class="panel-title">Daedric Spear</span></div>
+            <div class="panel-content inventory-panel-content">
+                <!-- ... (Inventory content from previous step) ... -->
+                <div class="inventory-encumbrance-bar"><div class="gauge dark" data-current="458" data-max="700" data-color="#0048c0" style="height: 18px;"></div></div>
+                <div class="inventory-tabs horizontal">
+                    <button class="tab-button dark active" data-tab="inv-all">All</button><button class="tab-button dark" data-tab="inv-weapon">Weapon</button>
+                    <button class="tab-button dark" data-tab="inv-apparel">Apparel</button><button class="tab-button dark" data-tab="inv-magic">Magic</button>
+                    <button class="tab-button dark" data-tab="inv-misc">Misc</button>
                 </div>
                 <div class="inventory-main-area">
-                    <div class="inventory-tabs vertical">
-                        <button class="tab-button dark active" data-tab="inv-all">All</button>
-                        <button class="tab-button dark" data-tab="inv-weapons">Weapons</button>
-                        <button class="tab-button dark" data-tab="inv-apparel">Apparel</button>
-                        <button class="tab-button dark" data-tab="inv-magic">Magic</button>
-                        <button class="tab-button dark" data-tab="inv-misc">Misc</button>
-                    </div>
-                    <div class="paperdoll-and-items">
-                        <div class="paperdoll-area-small">
-                            <img src="https://via.placeholder.com/80x150/111111/cccccc?text=Doll" alt="Paperdoll">
-                        </div>
-                        <div class="item-list-container">
-                            <div class="tab-content dark active" id="inv-all-content">
-                                <div class="inv-item">Gold <span class="item-count">1200</span></div>
-                                <div class="inv-item">Iron Dagger</div>
-                                <div class="inv-item">Common Robe</div>
-                                <div class="inv-item">Scroll of Fireball</div>
-                                <div class="inv-item">Bread <span class="item-count">3</span></div>
-                                <div class="inv-item">Moon Sugar</div>
-                            </div>
-                            <div class="tab-content dark" id="inv-weapons-content">
-                                <div class="inv-item">Iron Dagger</div>
-                                <div class="inv-item">Steel Shortsword</div>
-                            </div>
-                            <div class="tab-content dark" id="inv-apparel-content">
-                                <div class="inv-item">Common Robe</div>
-                                <div class="inv-item">Leather Boots</div>
-                            </div>
-                            <div class="tab-content dark" id="inv-magic-content">
-                                <div class="inv-item">Scroll of Fireball</div>
-                                <div class="inv-item">Potion of Healing</div>
-                            </div>
-                            <div class="tab-content dark" id="inv-misc-content">
-                                <div class="inv-item">Bread <span class="item-count">3</span></div>
-                                <div class="inv-item">Moon Sugar</div>
-                                <div class="inv-item">Lockpick</div>
-                            </div>
-                        </div>
+                    <div class="paperdoll-area-inventory"><img src="https://via.placeholder.com/100x180/1a1a1a/333333?text=Paperdoll" alt="Paperdoll"><div class="armor-rating">Armor: 85</div></div>
+                    <div class="item-grid-container">
+                        <div class="tab-content dark active" id="inv-all-content"><div class="item-slot"><img src="https://via.placeholder.com/32x32/4a3b2a/1a1a1a?text=S" alt="Item"><span class="item-count">1</span></div><div class="item-slot"><img src="https://via.placeholder.com/32x32/4a3b2a/1a1a1a?text=P" alt="Item"><span class="item-count">5</span></div><div class="item-slot"></div><div class="item-slot"></div><div class="item-slot"></div><div class="item-slot"></div><div class="item-slot"></div><div class="item-slot"></div></div>
+                        <div class="tab-content dark" id="inv-weapon-content"><div class="item-slot"><img src="https://via.placeholder.com/32x32/5a4b3a/1a1a1a?text=W" alt="Item"></div></div>
+                        <div class="tab-content dark" id="inv-apparel-content"><div class="item-slot"><img src="https://via.placeholder.com/32x32/6a5b4a/1a1a1a?text=A" alt="Item"></div></div>
+                        <div class="tab-content dark" id="inv-magic-content"><div class="item-slot"><img src="https://via.placeholder.com/32x32/7a6b5a/1a1a1a?text=M" alt="Item"></div></div>
+                        <div class="tab-content dark" id="inv-misc-content"><div class="item-slot"><img src="https://via.placeholder.com/32x32/8a7b6a/1a1a1a?text=I" alt="Item"></div></div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Map Window -->
-        <div class="morrowind-window" id="map-window" style="top: 170px; left: 1130px; width: 380px; height:300px">
-            <div class="window-title-bar">
-                <span class="window-title">Map</span>
-                <button class="window-close-button">×</button>
-            </div>
-            <div class="window-content map-content">
-                <!-- IMPORTANT: Replace "your_map_image_filename.png" with the actual name of your map image file -->
-                <img src="image.png" alt="Vvardenfell Map">
-            </div>
-        </div>
-
     </div>
     <script src="script.js"></script>
 </body>
