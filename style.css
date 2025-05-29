@@ -8,14 +8,22 @@
 
 
 body {
-    background-color: #121212; /* Very dark background */
-    font-family: 'MorrowindCustomFont', Verdana, sans-serif; /* Cleaner sans-serif font */
-    color: #cccccc; /* Light grey text */
+    background-color: #121212;
+    /* --- THIS IS THE KEY CHANGE FOR GLOBAL FONT APPLICATION --- */
+    font-family: 'MorrowindCustomFont', Verdana, sans-serif; 
+    /* 
+       'MorrowindCustomFont' is now the primary font.
+       Verdana and sans-serif are fallbacks if your custom font fails to load or 
+       doesn't contain certain characters.
+    */
+    color: #cccccc;
     margin: 0;
     padding: 0;
     height: 100vh;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 13px; /* You might need to adjust this base font size 
+                        once your custom font is applied, as it might
+                        render differently in size. */
 }
 
 #morrowind-ui-container {
@@ -345,4 +353,10 @@ body {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain; /* Or 'cover' or 'scale-down' depending on desired behavior */
+}
+
+button, input, textarea, select {
+    font-family: 'MorrowindCustomFont', Verdana, sans-serif;
+    /* You might also want to inherit other font properties */
+    /* font-size: inherit; */
 }
