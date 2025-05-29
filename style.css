@@ -1,6 +1,15 @@
+@font-face {
+    font-family: 'MorrowindCustomFont'; /* Choose a name for your font family */
+    src: url('MyMorrowindFont.ttf') format('truetype');
+
+    font-weight: normal; /* Or bold, if it's a bold variant */
+    font-style: normal;  /* Or italic, if it's an italic variant */
+}
+
+
 body {
     background-color: #121212; /* Very dark background */
-    font-family: 'Verdana', sans-serif; /* Cleaner sans-serif font */
+    font-family: 'MorrowindCustomFont', Verdana, sans-serif; /* Cleaner sans-serif font */
     color: #cccccc; /* Light grey text */
     margin: 0;
     padding: 0;
@@ -41,6 +50,7 @@ body {
 }
 
 .window-title {
+    font-family: 'MorrowindCustomFont', Verdana, sans-serif;
     font-weight: bold;
     color: #e0e0d0;
     font-size: 1.1em;
